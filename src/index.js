@@ -1,6 +1,9 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+const interprete = require('./Interprete');
+
+var fs = require('fs'); 
 
 //configuracion
 app.set('port',4000)
@@ -12,6 +15,13 @@ app.set('view engine', 'ejs');
 app.get('/', (req,res)=>{
     res.render('index.html');
 });
+
+app.get('/parser', (req,res)=>{
+    const entrada = fs.readFileSync('./entrada.txt');
+    var inter = new interprete();
+    res.send(inter.Parser(entrada));
+});
+
 
 // escuchar
 app.listen(app.get('port'),() => {

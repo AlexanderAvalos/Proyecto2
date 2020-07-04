@@ -1,14 +1,12 @@
-/*
-* analizador lexico
-*/
-
-%lex 
+%lex
 
 %options case-insensitive
 
-%% 
+%%
+\s+											// se ignoran espacios en blanco
+"//".*										// comentario simple línea
+[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]			// comentario multiple líneas
 
-//reservadas
 "int"           return 'INT';
 "double"        return 'DOUBLE';
 "char"          return 'CHAR';
@@ -42,50 +40,56 @@
 ")"              return 'PARDER';
 ">"              return 'MAYOR';
 "<"              return 'MENOR';
-"!"              return 'INTERROGACION';
+"!"              return 'NOT';
 "&&"             return 'AND';
 "||"             return 'OR';
 "!="             return 'DIFERENTE';
 "=="             return 'IGUALIGUAL';
 ">="             return 'MAYORIGUAL';
 "<="             return 'MENORIGUAL';
-
 //SIGNOS
 "."              return 'PUNTO';
 "+"              return 'MAS';
 "-"              return 'MENOS';
 "/"              return 'DIVISION';
 "*"              return 'MULTIPLICACION';
-
 //ESPACIOS EN BLANCO
 
-[ \r\t]+           {}
-\n                 {}
 
-//EXPRESIONES REGULARES
+\"[^\"]*\"				{ yytext = yytext.substr(1,yyleng-2); return 'CADENA'; }
+[0-9]+("."[0-9]+)?\b  	                return 'DECIMAL';
+[0-9]+\b				return 'ENTERO';
+([a-zA-Z])[a-zA-Z0-9_]*	                return 'ID';
+\'.\'                                   return 'CARACTER';
+        
 
-\s+ 
-[0-9]+("."[0-9]+)?\b                         return 'DECIMAL';
-[0-9]+\b                                     return 'ENTERO';
-([a-zA-Z])[a-zA-Z0-9_]*                      return 'ID';
-'\'.\''\b                                    return 'CARACTER';
-"\"[^\"]*\"                                  {yytext = yytext.substr(1,yyleng-2); return 'CADENA'; }
-"//".*	                                     
-[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]          
 
-<<EOF>>                                      return 'EOF';
-
-.                               {console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); }
+<<EOF>>				return 'EOF';
+.					{ console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); }
 
 /lex
 
-%%star s
 
-%% /* definicion de la gramatica*/
+%{
+        const TIPO_INSTRUCCION	    = require('./instrucciones').TIPO_INSTRUCCION;
+	const OBJETO_INSTRUCCION    = require('./instrucciones').OBJETO_INSTRUCCION;
+%}
+%left 'AND' 'OR' 
+%left 'IGUALIGUAL' 'DIFERENTE' 
+%left 'MAYOR' 'MENOR' ' MAYORIGUAL' 'MENORIGUAL'
+%left 'MAS' 'MENOS'
+%left 'MULTIPLICACION' 'DIVISION'
+%left 'UMENOS'
 
 
-s 
-        :   instrucciones EOF  {return $1;} 
+/* Asociación de operadores y precedencia */
+
+%start ini
+
+%% /* Definición de la gramática */
+
+ini
+	: instrucciones EOF  {return $1;} 
 ;
 
 instrucciones 
@@ -93,26 +97,26 @@ instrucciones
         |   instruccion { $$ = [$1]; }
 ;
 
-instruccion: 
-        :   declaracion {return $1;}
-        |   asignacion  {return $1;}
-        |   main        {return $1;}
-        |   metodo      {return $1;}
-        |   funcion     {return $1;}
+instruccion 
+        :   declaracion {$$= $1;}
+        |   asignacion  {$$=  $1;}
+        |   main        {$$=  $1;}
+        |   metodo      {$$=  $1;}
+        |   funcion     {$$=  $1;}
 ;
 
 declaracion 
-        :   tipo declaraciones PYCOMA {}
+        :   tipo declaraciones PYCOMA {$$ = OBJETO_INSTRUCCION.Declaracion($1,$2);}
 ;
 
 declaraciones 
-        :   declaraciones COMA decla {}
-        |   decla                    {return $1;} 
+        :   declaraciones COMA decla { $1.push($3); $$ = $1;}
+        |   decla                    {$$ = [$1];} 
 ;
 
  decla  
-        :   ID IGUAL operacion   {}
-        |   ID                   {}
+        :   ID IGUAL operacion   {$$ = $1+$2+$3;}
+        |   ID                   {$$ = $1+"= 0";}
 ;
  
 main    
@@ -120,8 +124,8 @@ main
 ;
 
 metodo 
-        :   VOID ID PARIZQ PARDER LLAVEIZQ sentencias LLAVEDER
-        |   VOID ID PARIZQ parametros PARDER LLAVEIZQ sentencias LLAVEDER
+        :   VOID ID PARIZQ PARDER LLAVEIZQ sentencias LLAVEDER  {} 
+        |   VOID ID PARIZQ parametros PARDER LLAVEIZQ sentencias LLAVEDER  {}
 ;
 
 parametros 
@@ -130,43 +134,43 @@ parametros
 ;
 
 parametro  
-        :   tipo ID 
+        :   tipo ID {$$=  $1}
 ;
 
 funcion 
-        :   tipo ID PARIZQ PARDER LLAVEIZQ sentencias LLAVEDER
-        |   tipo ID PARIZQ parametros PARDER LLAVEIZQ sentencias LLAVEDER
+        :   tipo ID PARIZQ PARDER LLAVEIZQ sentencias LLAVEDER  {}
+        |   tipo ID PARIZQ parametros PARDER LLAVEIZQ sentencias LLAVEDER  {}
 ;   
 
 sentencias
-        :   sentencias sentencia {$1.push($2); $$ = $1}
-        |   sentencia            {$$ = [$1]}
+        :   sentencias sentencia {$1.push($2); $$ = $1;}
+        |   sentencia            {$$ = [$1];}
 ;
 
 Sentencia 
-        :   declaracion   {return $1;}
-        |   asignacion    {return $1;}
-        |   if            {return $1;}
-        |   while         {return $1;}
-        |   for           {return $1;}
-        |   do_while      {return $1;}
-        |   switch        {return $1;}
-        |   break         {return $1;}
-        |   return        {return $1;}
-        |   continue      {return $1;}
-        |   print         {return $1;} 
-        |   callMetodo    {return $1;}
+        :   declaracion   {$$=  $1;}
+        |   asignacion    {$$=  $1;}
+        |   if            {$$=  $1;}
+        |   while         {$$=  $1;}
+        |   for           {$$=  $1;}
+        |   do_while      {$$=  $1;}
+        |   switch        {$$=  $1;}
+        |   break         {$$=  $1;}
+        |   return        {$$=  $1;}
+        |   continue      {$$=  $1;}
+        |   print         {$$=  $1;} 
+        |   callMetodo    {$$=  $1;}
 ;
 
 asignacion 
-        :   ID IGUAL operacion PYCOMA {}
+        :   ID IGUAL operacion PYCOMA {$$ = TIPO_INSTRUCCION.Asignacion($1,$3);}
 ;
 
 if 
-        :   IF PARIZQ operacion PARDER LLAVEIZQ sentencias LLAVEDER                  {}
-        |   IF PARIZQ operacion PARDER LLAVEIZQ sentencias LLAVEDER ELSE LLAVEIZQ sentencias LLAVEDER {}
-        |   IF PARIZQ operacion PARDER LLAVEIZQ sentencias LLAVEDER else_if          {}
-        |   IF PARIZQ operacion PARDER LLAVEIZQ sentencias LLAVEDER else_if ELSE LLAVEIZQ sentencias LLAVEDER {}
+        :   IF PARIZQ operacion PARDER LLAVEIZQ sentencias LLAVEDER       {$$ = TIPO_INSTRUCCION.s_If($3,$6);}
+        |   IF PARIZQ operacion PARDER LLAVEIZQ sentencias LLAVEDER ELSE LLAVEIZQ sentencias LLAVEDER {$$ = TIPO_INSTRUCCION.s_Else($3,$6,$10);}
+        |   IF PARIZQ operacion PARDER LLAVEIZQ sentencias LLAVEDER else_if          {$$ = TIPO_INSTRUCCION.s_Ifaux($3,$6,"",$8);}
+        |   IF PARIZQ operacion PARDER LLAVEIZQ sentencias LLAVEDER else_if ELSE LLAVEIZQ sentencias LLAVEDER {$$ = TIPO_INSTRUCCION.s_Ifaux($3,$6,$11,$8);}}
 ;
 
 else_if 
@@ -175,50 +179,50 @@ else_if
 ;
 
 elif 
-        :   ELSE IF PARIZQ operacion PARDER LLAVEIZQ sentencias LLAVEDER 
+        :   ELSE IF PARIZQ operacion PARDER LLAVEIZQ sentencias LLAVEDER   {$$= TIPO_INSTRUCCION.s_Elif($3,$6);}
 ;
 
 while 
-        :   WHILE PARIZQ operacion PARDER LLAVEIZQ sentencias LLAVEDER
+        :   WHILE PARIZQ operacion PARDER LLAVEIZQ sentencias LLAVEDER  {$$ = TIPO_INSTRUCCION.s_While($3,$6);}
 ;
 
 do_while 
-        :   DO LLAVEIZQ sentencias LLAVEDER WHILE PARIZQ operacion PARDER PYCOMA 
+        :   DO LLAVEIZQ sentencias LLAVEDER WHILE PARIZQ operacion PARDER PYCOMA  {$$ = TIPO_INSTRUCCION.s_DO($3,$7);}
 ;
 
 for 
-        :   FOR PARIZQ inicializacion PYCOMA operacion PYCOMA incremento PARDER LLAVEIZQ sentencias LLAVEDER
+        :   FOR PARIZQ inicializacion PYCOMA operacion PYCOMA incremento PARDER LLAVEIZQ sentencias LLAVEDER  {$$=TIPO_INSTRUCCION.s_For($3,$5,$7,$10);}
 ;
 
 inicializacion 
-        :   tipo ID IGUAL operacion 
-        |   ID IGUAL operacion 
+        :   tipo ID IGUAL operacion  {$$= $4;}
+        |   ID IGUAL operacion   {$$ = $4;}
 ;
 
 incremento 
-        :   ID MAS MAS 
-        |   ID MENOS MENOS
+        :   ID MAS MAS   {$$= $1;}
+        |   ID MENOS MENOS  {$$ = $1;}
 ;
 
 callMetodo 
-        :   ID PARIZQ PARDER PYCOMA
-        |   ID PARIZQ valores PARDER PYCOMA
+        :   ID PARIZQ PARDER PYCOMA  {}
+        |   ID PARIZQ valores PARDER PYCOMA   {}
 ;
 
 print 
-        :   CONSOLE PUNTO WRITE PARIZQ CADENA COMA valores PARDER PYCOMA
-        |   CONSOLE PUNTO WRITE PARIZQ CADENA MAS valores PARDER PYCOMA
-        |   CONSOLE PUNTO WRITE PARIZQ CADENA PARDER PYCOMA
-        |   CONSOLE PUNTO WRITE PARIZQ CSIMPLE valores CSIMPLE PARDER PYCOMA
+        :   CONSOLE PUNTO WRITE PARIZQ CADENA COMA valores PARDER PYCOMA  {}
+        |   CONSOLE PUNTO WRITE PARIZQ CADENA MAS valores PARDER PYCOMA   {}
+        |   CONSOLE PUNTO WRITE PARIZQ CADENA PARDER PYCOMA               {}
+        |   CONSOLE PUNTO WRITE PARIZQ CSIMPLE valores CSIMPLE PARDER PYCOMA   {}
 ;
 
 valores 
-        :   valores COMA operacion
-        |   operacion
+        :   valores COMA operacion  {$1.push($2); $$ = $1;}
+        |   operacion               {$$ = $1;}
 ;
 
 switch 
-        :   SWITCH PARIZQ operacion PARDER LLAVEIZQ casos LLAVEDER
+        :   SWITCH PARIZQ operacion PARDER LLAVEIZQ casos LLAVEDER   {}
 ;
 
 casos 
@@ -227,56 +231,66 @@ casos
 ;
 
 caso 
-        :   CASE operacion DOSPUNTOS sentencias
-        |   DEFAULT DOSPUNTOS sentencias
+        :   CASE operacion DOSPUNTOS sentencias   {}
+        |   DEFAULT DOSPUNTOS sentencias          {}
 ;
 
 break 
-        :   BREAK PYCOMA
+        :   BREAK PYCOMA                          {}
 ;
 
 continue 
-        : CONTINUE PYCOMA
+        : CONTINUE PYCOMA                         {}
 ;
 
 return 
-        :   RETURN operacion PYCOMA
-        |   RETURN PYCOMA
+        :   RETURN operacion PYCOMA               {}
+        |   RETURN PYCOMA                         {}
 ;
 
 operacion 
-        :   operacion   AND             operacion
-        |   operacion   OR              operacion 
-        |   operacion   IGUALIGUAL      operacion
-        |   operacion   DIFERENTE       operacion 
-        |   operacion   MAYOR           operacion
-        |   operacion   MENOR           operacion
-        |   operacion   MAYORIGUAL      operacion
-        |   operacion   MENORIGUAL      operacion
-        |   operacion   MAS             operacion
-        |   operacion   MENOS           operacion
-        |   operacion   MULTIPLICACION  operacion
-        |   operacion   DIVISION        operacion
-        |   operacion   INTERROGACION   operacion DOSPUNTOS operacion
-        |   ID PARIZQ PARDER
-        |   ID PARIZQ valores PARDER
-        |   valor
+        :       operacion AND operacion
+        |       operacion OR operacion
+        |       NOT operacion %prec UMENOS
+        |       operacion_relacional
+        ;
+
+operacion_relacional
+        :       operacion_numerica   IGUALIGUAL      operacion_numerica                {}
+        |       operacion_numerica   DIFERENTE       operacion_numerica                {}
+        |       operacion_numerica   MAYOR           operacion_numerica                {}
+        |       operacion_numerica   MENOR           operacion_numerica                {}
+        |       operacion_numerica   MAYORIGUAL      operacion_numerica                {}
+        |       operacion_numerica   MENORIGUAL      operacion_numerica                {}
+        |       operacion_numerica
+        ;
+
+operacion_numerica 
+        :   operacion_numerica   MAS             operacion_numerica                {}
+        |   operacion_numerica   MENOS           operacion_numerica                {}
+        |   operacion_numerica   MULTIPLICACION  operacion_numerica                {}
+        |   operacion_numerica   DIVISION        operacion_numerica                {}
+        |       MENOS operacion_numerica %prec UMENOS    {}
+        |       PARIZQ operacion PARDER
+        |       ID PARIZQ PARDER
+        |       ID PARIZQ valores PARDER
+        |   valor                {}
 ;
 
 tipo 
-        :   INT
-        |   DOUBLE
-        |   CHAR
-        |   ID
-        |   STRING  
+        :   INT                 {$$ = $1;}
+        |   DOUBLE              {}
+        |   CHAR                {}
+        |   ID                  {}
+        |   STRING              {}
 ;    
 
 valor 
-        :   ENTERO
-        |   ID
-        |   DECIMAL
-        |   CARACTER   
-        |   CADENA  
-        |   fALSE
-        |   TRUE
+        :   ENTERO               {} 
+        |   ID                   {}
+        |   DECIMAL              {}
+        |   CARACTER             {}   
+        |   CADENA               {}  
+        |   FALSE                {}
+        |   TRUE                 {}
 ;
