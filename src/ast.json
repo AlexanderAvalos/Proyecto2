@@ -1,0 +1,268 @@
+[
+  {
+    "etiqueta": 1,
+    "valor": "g= 0h= 0"
+  },
+  {
+    "etiqueta": 2,
+    "valor": "g=\"adios\""
+  },
+  {
+    "etiqueta": 3,
+    "sentencia": [
+      {
+        "etiqueta": 1,
+        "valor": "a= 0b=(1+1)"
+      },
+      {
+        "etiqueta": 2,
+        "valor": "a=b+2"
+      },
+      {
+        "etiqueta": 22,
+        "valor": "b+= 1"
+      },
+      {
+        "etiqueta": 14,
+        "valor": "print(\"hola\",b)"
+      },
+      {
+        "etiqueta": 15,
+        "valor": "print('<HTML>')",
+        "val": "'<HTML>'"
+      },
+      {
+        "etiqueta": 6,
+        "condicion": "r==0",
+        "sentencia": [
+          {
+            "etiqueta": 15,
+            "valor": "print('</HTML>')",
+            "val": "'</HTML>'"
+          }
+        ]
+      },
+      {
+        "etiqueta": 6,
+        "condicion": "r==\"hola\"",
+        "sentencia": [
+          {
+            "etiqueta": 15,
+            "valor": "print('</HTML>')",
+            "val": "'</HTML>'"
+          }
+        ]
+      },
+      {
+        "etiqueta": 9,
+        "condicion": "r==0andc==bornot(a>c)",
+        "sentencia": [
+          {
+            "etiqueta": 15,
+            "valor": "print('</HTML>')",
+            "val": "'</HTML>'"
+          }
+        ],
+        "sentenciaE": "",
+        "elseif": [
+          {
+            "etiqueta": 8,
+            "condicion": "r<l",
+            "sentencia": [
+              {
+                "etiqueta": 15,
+                "valor": "print('</HTML>')",
+                "val": "'</HTML>'"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "etiqueta": 13,
+        "valor": "id(\"l\",a,b,\"d\")"
+      },
+      {
+        "etiqueta": 13,
+        "valor": "nose()"
+      },
+      {
+        "etiqueta": 7,
+        "condicion": "a!=bandc==bornota>c",
+        "sentenciaI": [
+          {
+            "etiqueta": 14,
+            "valor": "print(\"hola\",b)"
+          }
+        ],
+        "sentencia": [
+          {
+            "etiqueta": 14,
+            "valor": "print(\"no\",b)"
+          }
+        ]
+      },
+      {
+        "etiqueta": 16,
+        "condicion": "g",
+        "caso": [
+          {
+            "etiqueta": 17,
+            "valor": "1",
+            "sentencia": [
+              {
+                "etiqueta": 14,
+                "valor": "print(g)"
+              },
+              {
+                "etiqueta": 19,
+                "valor": "break"
+              }
+            ]
+          },
+          {
+            "etiqueta": 17,
+            "valor": "2",
+            "sentencia": [
+              {
+                "etiqueta": 14,
+                "valor": "print(g)"
+              },
+              {
+                "etiqueta": 19,
+                "valor": "break"
+              }
+            ]
+          },
+          {
+            "etiqueta": 17,
+            "valor": "2",
+            "sentencia": [
+              {
+                "etiqueta": 14,
+                "valor": "print(g)"
+              },
+              {
+                "etiqueta": 19,
+                "valor": "break"
+              }
+            ]
+          },
+          {
+            "etiqueta": 18,
+            "sentencia": [
+              {
+                "etiqueta": 14,
+                "valor": "print(g)"
+              },
+              {
+                "etiqueta": 19,
+                "valor": "break"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "etiqueta": 4,
+    "id": "hola",
+    "parametro": [
+      "g",
+      "h"
+    ],
+    "sentencia": [
+      {
+        "etiqueta": 1,
+        "valor": "a= 0"
+      },
+      {
+        "etiqueta": 11,
+        "condicion": "a!='n'",
+        "sentencia": [
+          {
+            "etiqueta": 14,
+            "valor": "print(\"do-while\")"
+          }
+        ]
+      },
+      {
+        "etiqueta": 10,
+        "condicion": "g!=g",
+        "sentencia": [
+          {
+            "etiqueta": 14,
+            "valor": "print(\"while\")"
+          },
+          {
+            "etiqueta": 15,
+            "valor": "print('<HTML>')",
+            "val": "'<HTML>'"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "etiqueta": 5,
+    "id": "yes",
+    "parametro": "",
+    "sentencia": [
+      {
+        "etiqueta": 1,
+        "valor": "no=\"no\""
+      },
+      {
+        "etiqueta": 9,
+        "condicion": "no!=\"si\"",
+        "sentencia": [
+          {
+            "etiqueta": 14,
+            "valor": "print(\"no\")"
+          }
+        ],
+        "sentenciaE": [
+          {
+            "etiqueta": 12,
+            "inicializacion": "0",
+            "condicion": "i<10",
+            "variable": "i",
+            "sentencia": [
+              {
+                "etiqueta": 1,
+                "valor": "j=(i+i)"
+              }
+            ]
+          }
+        ],
+        "elseif": [
+          {
+            "etiqueta": 8,
+            "condicion": "no==\"si\"",
+            "sentencia": [
+              {
+                "etiqueta": 14,
+                "valor": "print(\"si\")"
+              }
+            ]
+          },
+          {
+            "etiqueta": 8,
+            "condicion": "g<=g",
+            "sentencia": [
+              {
+                "etiqueta": 14,
+                "valor": "print(\"saber\")"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "etiqueta": 20,
+        "valor": "return no"
+      }
+    ]
+  }
+]

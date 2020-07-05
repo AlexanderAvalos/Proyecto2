@@ -1,1 +1,68 @@
-int a = 10, b=11, c;
+string g,h;
+g="adios";
+void main(){
+    int a,b=(1+1);
+    a=b+2;
+    b++;
+    Console.Write("hola"+b);
+    Console.Write('<HTML>');
+    if(r==0){
+        Console.Write('</HTML>');
+    }
+    if(r=="hola"){
+        Console.Write('</HTML>');
+    }
+    if(r==0 && c==b || !(a>c)){
+        Console.Write('</HTML>');
+    }else if(r<l){
+        Console.Write('</HTML>');
+    }
+    id("l",a,b,"d");
+    nose();
+    if(a!=b && c==b || !a>c){
+        Console.Write("hola"+b);
+    }else{
+        Console.Write("no"+b);
+    }
+    switch(g){
+        case 1:
+        Console.Write(g);
+        break;
+	case 2:
+        Console.Write(g);
+        break;
+	case 2:
+        Console.Write(g);
+        break;
+	default:
+        Console.Write(g);
+        break;
+    }
+}
+
+void hola(string g, int h){
+    char a;
+	do{
+	Console.Write("do-while");
+	}while(a!='n');
+	while(g!=g){
+	Console.Write("while");
+    Console.Write('<HTML>');
+	}
+}
+
+string yes(){
+    string no = "no";
+	if(no!="si"){
+	Console.Write("no");
+	}else if(no=="si"){
+	Console.Write("si");
+	}else if(g<=g){
+	Console.Write("saber");
+	}else{
+		for(double i=0;i<10;i++){
+		double j = (i+i);
+		}
+	}
+    return no;
+}
