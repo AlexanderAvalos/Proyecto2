@@ -119,8 +119,8 @@ declaraciones
 ;
 
 decla  
-        :   ID IGUAL operacion   {$$ = $1+$2+$3;}
-        |   ID                   {$$ = $1+"= 0";}
+        :   ID IGUAL operacion   {$$ = $1+" "+$2+" "+$3;}
+        |   ID                   {$$ = $1+" = 0";}
 ;
  
 main1   
@@ -219,6 +219,7 @@ print
         :   CONSOLE PUNTO WRITE PARIZQ CADENA COMA valores PARDER PYCOMA  {$$ = OBJETO_INSTRUCCION.s_Print('\"'+$5+'\"'+$6+$7);}
         |   CONSOLE PUNTO WRITE PARIZQ CADENA MAS valores PARDER PYCOMA   {$$ = OBJETO_INSTRUCCION.s_Print('\"'+$5+'\"'+","+$7);}
         |   CONSOLE PUNTO WRITE PARIZQ valor PARDER PYCOMA                {$$ = OBJETO_INSTRUCCION.s_Print($5);}
+        |   CONSOLE PUNTO WRITE PARIZQ incremento PARDER PYCOMA                    {$$ = OBJETO_INSTRUCCION.s_Print($5);}
         |   CONSOLE PUNTO WRITE PARIZQ CADENAHTML PARDER PYCOMA           {$$ = OBJETO_INSTRUCCION.s_PrintH($5);}
 ;
 

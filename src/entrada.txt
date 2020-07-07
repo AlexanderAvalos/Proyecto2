@@ -7,15 +7,15 @@ void main(){
     Console.Write("hola"+b);
     Console.Write('<HTML>');
     if(r==0){
-        Console.Write('</HTML>');
+        Console.Write('<head>');
     }
     if(r=="hola"){
-        Console.Write('</HTML>');
+        Console.Write('</head>');
     }
     if(r==0 && c==b || !(a>c)){
-        Console.Write('</HTML>');
+        Console.Write('<body>');
     }else if(r<l){
-        Console.Write('</HTML>');
+        Console.Write('</body>');
     }
     id("l",a,b,"d");
     nose();
@@ -47,7 +47,6 @@ void hola(string g, int h){
 	}while(a!='n');
 	while(g!=g){
 	Console.Write("while");
-    Console.Write('<HTML>');
 	}
 }
 

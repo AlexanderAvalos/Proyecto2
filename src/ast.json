@@ -1,22 +1,28 @@
 [
   {
     "etiqueta": 1,
-    "valor": "g= 0h= 0"
+    "valor": "g = 0 h = 0 ",
+    "tip": "string"
   },
   {
     "etiqueta": 2,
-    "valor": "g=\"adios\""
+    "valor": "g=\"adios\" ",
+    "id": "g=",
+    "op": "\"adios\""
   },
   {
     "etiqueta": 3,
     "sentencia": [
       {
         "etiqueta": 1,
-        "valor": "a= 0b=(1+1)"
+        "valor": "a = 0 b = (1+1) ",
+        "tip": "int"
       },
       {
         "etiqueta": 2,
-        "valor": "a=b+2"
+        "valor": "a=b+2 ",
+        "id": "a=",
+        "op": "b+2"
       },
       {
         "etiqueta": 22,
@@ -37,8 +43,8 @@
         "sentencia": [
           {
             "etiqueta": 15,
-            "valor": "print('</HTML>')",
-            "val": "'</HTML>'"
+            "valor": "print('<head>')",
+            "val": "'<head>'"
           }
         ]
       },
@@ -48,8 +54,8 @@
         "sentencia": [
           {
             "etiqueta": 15,
-            "valor": "print('</HTML>')",
-            "val": "'</HTML>'"
+            "valor": "print('</head>')",
+            "val": "'</head>'"
           }
         ]
       },
@@ -59,8 +65,8 @@
         "sentencia": [
           {
             "etiqueta": 15,
-            "valor": "print('</HTML>')",
-            "val": "'</HTML>'"
+            "valor": "print('<body>')",
+            "val": "'<body>'"
           }
         ],
         "sentenciaE": "",
@@ -71,8 +77,8 @@
             "sentencia": [
               {
                 "etiqueta": 15,
-                "valor": "print('</HTML>')",
-                "val": "'</HTML>'"
+                "valor": "print('</body>')",
+                "val": "'</body>'"
               }
             ]
           }
@@ -175,7 +181,8 @@
     "sentencia": [
       {
         "etiqueta": 1,
-        "valor": "a= 0"
+        "valor": "a = 0 ",
+        "tip": "char"
       },
       {
         "etiqueta": 11,
@@ -194,11 +201,6 @@
           {
             "etiqueta": 14,
             "valor": "print(\"while\")"
-          },
-          {
-            "etiqueta": 15,
-            "valor": "print('<HTML>')",
-            "val": "'<HTML>'"
           }
         ]
       }
@@ -211,7 +213,8 @@
     "sentencia": [
       {
         "etiqueta": 1,
-        "valor": "no=\"no\""
+        "valor": "no = \"no\" ",
+        "tip": "string"
       },
       {
         "etiqueta": 9,
@@ -231,7 +234,8 @@
             "sentencia": [
               {
                 "etiqueta": 1,
-                "valor": "j=(i+i)"
+                "valor": "j = (i+i) ",
+                "tip": "double"
               }
             ]
           }

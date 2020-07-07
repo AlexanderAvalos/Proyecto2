@@ -1,0 +1,39 @@
+<html>
+
+<head>
+    <script language="javascript">
+
+        function comprobar() {
+            var cuerpo = document.formu.nombre.value;
+            alert(cuerpo);
+            var json = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/text'
+                },
+                body: 'cuerpo'
+            }   
+                 fetch('http://localhost:3000/parser', json
+                ).then(function (response) {
+                    console.log   (response.text);
+                    return response.json();
+                })
+                    .then(function (data) {
+                        console.log(data);
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+            }
+    </script>
+</head>
+
+<body>
+    <form method="POST" name="formu" id="formu" onsubmit="return comprobar()">
+        Tu nombre: <input type="text" name="nombre" value=""><br>
+        Tu edad: <input type="text" name="edad" value="" size="2" maxlength="2"><br>
+        <input type="submit" value="   Enviar   ">
+    </form>
+</body>
+
+</html>

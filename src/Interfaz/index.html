@@ -1,9 +1,16 @@
 <!DOCTYPE html>
 <html>
-
 <head>
+    <script>
+    var himalaya = require('himalaya');
+        alert(htm);
+        function convertir(html) {
+        var json = himalaya.parse(html);
+        console.dir(json, { colors: true, depth: null });
+    }
+    </script>
+ 
     <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Proyecto 2</title>
     <!-- bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
@@ -39,8 +46,8 @@
                         <i class="fas fa-archive"></i>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">Nuevo</a>
-                        <input type="file" class="form-control-file" id="exampleFormControlFile1">
+                        <a class="dropdown-item">Nuevo</a>
+                        <input type="file" id="file-input" />
                         <a class="dropdown-item" href="#">Guardar</a>
                         <a class="dropdown-item" href="#">Guardar Como</a>
                         <a class="dropdown-item" href="#">salir</a>
@@ -66,8 +73,8 @@
                         <div class="container-fluid">
                             <table>
                                 <tr>
-                                    <th><textarea name="" id="" cols="55" rows="20"></textarea></th>
-                                    <th><button type="button" class="btn btn-outline-secondary"> Analizar </button></th>
+                                    <th><textarea id="pre1" cols="55" rows="20"><%= entra %></textarea> </th>
+                                    <th><button type="button" onclick= "inicio()"> Analizar </button></th>
                                 </tr>
                             </table>
                         </div>
@@ -76,7 +83,7 @@
             </th>
             <th>
                 <div class="container-fluid">
-                    <textarea name="" id="" cols="55" rows="15"></textarea>
+                    <textarea name="" id="" cols="55" rows="15"><%= traduccion %></textarea>
                 </div>
             </th>
         </tr>
@@ -93,12 +100,12 @@
                         <div class="container-fluid">
                             <table class="table table-dark">
                                 <thead>
-                                <tr>
-                                    <th scope="col">Nombre</th>
-                                    <th scope="col"> Tipo</th>
-                                    <th scope="col">Linea</th>
-                                </tr>
-                            </thead>
+                                    <tr>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col"> Tipo</th>
+                                        <th scope="col">Linea</th>
+                                    </tr>
+                                </thead>
                             </table>
                         </div>
                     </div>
@@ -116,18 +123,19 @@
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-HTML" role="tabpanel" aria-labelledby="nav-home-tab">
                         <div class="container-fluid">
-                            <textarea name="" id="" cols="55" rows="15"></textarea>
+                            <textarea name="" id="" cols="55" rows="15"><%= htm %></textarea>
                         </div>
                     </div>
                     <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                         <div class="container-fluid">
-                            <textarea name="" id="" cols="55" rows="15"></textarea>
+                            <textarea name="" id="" cols="55" rows="15"><%= jss %></textarea>
                         </div>
                     </div>
                 </div>
             </td>
         </tr>
     </table>
+    <script></script>
 </body>
 
 </html>
