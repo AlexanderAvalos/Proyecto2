@@ -228,64 +228,55 @@
       },
       {
         "etiqueta": 23,
-        "er": ";",
+        "er": ")",
         "fila": 58,
-        "columna": 20
+        "columna": 1
+      },
+      {
+        "etiqueta": 14,
+        "valor": "print(\"si\")"
+      },
+      {
+        "etiqueta": 23,
+        "er": "else",
+        "fila": 59,
+        "columna": 2
+      },
+      {
+        "etiqueta": 23,
+        "er": "else",
+        "fila": 59,
+        "columna": 7
+      },
+      {
+        "etiqueta": 7,
+        "condicion": "g<=g",
+        "sentenciaI": [
+          {
+            "etiqueta": 14,
+            "valor": "print(\"saber\")"
+          }
+        ],
+        "sentencia": [
+          {
+            "etiqueta": 12,
+            "inicializacion": "0",
+            "condicion": "i<10",
+            "variable": "i",
+            "sentencia": [
+              {
+                "etiqueta": 1,
+                "valor": "j = (i+i) ",
+                "tip": "double"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "etiqueta": 20,
+        "valor": "return no"
       }
     ]
-  },
-  {
-    "etiqueta": 23,
-    "er": ";",
-    "fila": 60,
-    "columna": 23
-  },
-  {
-    "etiqueta": 23,
-    "er": "}",
-    "fila": 61,
-    "columna": 1
-  },
-  {
-    "etiqueta": 23,
-    "er": ";",
-    "fila": 62,
-    "columna": 16
-  },
-  {
-    "etiqueta": 23,
-    "er": ";",
-    "fila": 62,
-    "columna": 21
-  },
-  {
-    "etiqueta": 23,
-    "er": ";",
-    "fila": 63,
-    "columna": 18
-  },
-  {
-    "etiqueta": 23,
-    "er": "}",
-    "fila": 64,
-    "columna": 2
-  },
-  {
-    "etiqueta": 23,
-    "er": "}",
-    "fila": 65,
-    "columna": 1
-  },
-  {
-    "etiqueta": 23,
-    "er": ";",
-    "fila": 66,
-    "columna": 13
-  },
-  {
-    "etiqueta": 23,
-    "er": "}",
-    "fila": 67,
-    "columna": 0
   }
 ]

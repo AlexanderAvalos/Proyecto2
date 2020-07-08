@@ -107,7 +107,6 @@ instruccion
         |   main1        {$$=  $1;}
         |   metodo      {$$=  $1;}
         |   funcion     {$$=  $1;}
-        |   error panic { $$= OBJETO_INSTRUCCION.s_error(yytext,this._$.first_line,this._$.first_column); }
 ;
 
 declaracion 
@@ -165,7 +164,7 @@ sentencia
         |   return        {$$=  $1;}
         |   continue      {$$=  $1;}
         |   print         {$$=  $1;} 
-        |   error  panic  { $$= OBJETO_INSTRUCCION.s_error(yytext,this._$.first_line,this._$.first_column); }
+        |   error   { $$= OBJETO_INSTRUCCION.s_error(yytext,this._$.first_line,this._$.first_column); }
 ;
 
 panic

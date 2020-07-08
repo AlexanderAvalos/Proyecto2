@@ -43,7 +43,7 @@ class interprete {
     convertir(html) {
         var json = himalaya.parse(html);
         trahtml = JSON.stringify(json);
-        // console.dir(json, { colors: true, depth: null });
+         console.dir(json, { colors: true, depth: null });
     }
     procesarBloque(instrucciones, indice) {
         instrucciones.forEach(instruccion => {
