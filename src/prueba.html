@@ -1,39 +1,52 @@
 <html>
 
 <head>
-    <script language="javascript">
 
-        function comprobar() {
-            var cuerpo = document.formu.nombre.value;
-            alert(cuerpo);
-            var json = {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/text'
-                },
-                body: 'cuerpo'
-            }   
-                 fetch('http://localhost:3000/parser', json
-                ).then(function (response) {
-                    console.log   (response.text);
-                    return response.json();
-                })
-                    .then(function (data) {
-                        console.log(data);
-                    })
-                    .catch(function (err) {
-                        console.log(err);
-                    });
-            }
-    </script>
 </head>
 
 <body>
-    <form method="POST" name="formu" id="formu" onsubmit="return comprobar()">
-        Tu nombre: <input type="text" name="nombre" value=""><br>
-        Tu edad: <input type="text" name="edad" value="" size="2" maxlength="2"><br>
-        <input type="submit" value="   Enviar   ">
+    <form id="formu">
+        Tu nombre: <input type="text" name="nombre" id="nombre" value=""><br>
+        <input type="file" name='archivo' id="file">
+        <button>enviar</button>
+        <textarea name="text" id="text" cols="30" rows="10"></textarea>
     </form>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
+    <script>
+        const $form = document.querySelector('#formu');
+        const $username = document.querySelector('#nombre');
+        const $text = document.querySelector('#text');
+        const $file = document.querySelector('#file');
+
+        function renderUsername(formdata) {
+            const username = formdata.get('nombre');
+            $username.textContent = username;
+        }
+        function renderArchivo(formdata) {
+            const file = formdata.get('archivo');
+            const arc = URL.createObjectURL(file);
+            $text.textContent = file;
+        }
+        $file.addEventListener('change',(event)=>{
+            const formData = new formData($form);
+            renderArchivo(formData);
+        })
+
+        $form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const formdata = new FormData(event.currentTarget);
+            renderUsername(formdata);
+            renderArchivo(formdata);
+            fetch('/', {
+                method: 'POST',
+                body: formdata,
+            });
+        });
+
+
+
+    </script>
 </body>
 
 </html>

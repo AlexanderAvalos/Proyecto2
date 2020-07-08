@@ -54,7 +54,7 @@ string yes(){
     string no = "no";
 	if(no!="si"){
 	Console.Write("no");
-	}else if(no=="si"){
+	}else if(no=="si")
 	Console.Write("si");
 	}else if(g<=g){
 	Console.Write("saber");

@@ -22,10 +22,14 @@ const TIPO_INSTRUCCION = {
   s_PrintH: 'TIPO_HTML',
   s_Casos: 'TIPO_CASO',
   s_Default: 'TIPO_DEFAULT',
-  s_incremento: 'TIPO_INCREMENTO'
+  s_incremento: 'TIPO_INCREMENTO',
+  s_error: 'TIPO_ERROR'
 }
 
 const OBJETO_INSTRUCCION = {
+  s_error: function(error, linea,col){
+    return{etiqueta:23, er: error, fila:linea, columna:col}
+  },
   Declaracion: function (tipo, declaraciones) {
     var salida = "";
     declaraciones.forEach(declaracion => {

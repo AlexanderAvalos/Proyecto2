@@ -6,7 +6,8 @@ var fs = require('fs');
 const { get } = require('http');
 const bodyParser = require('body-parser');
 const body_parser = require('body-parser').json();
-
+const multer = require('multer');
+const upload = multer({des: 'text/'});
 //configuracion
 app.set('port', 3000)
 app.set('views', path.join(__dirname, 'Interfaz'));
@@ -24,10 +25,11 @@ app.get('/', (req, res) => {
     const entrada = fs.readFileSync('./entrada.txt');
     var inter = new interprete();
     var ope = inter.Parser(entrada);
-    res.render('index.html', { traduccion: ope.phyton , htm: ope.htm, jss: ope.jss, entra:entrada});
-});
+    res.render('index.html', { traduccion: ope.phyton ,htm: ope.htm, jss: ope.jss,simb: ope.sim,valor: ope.valo, entra:entrada});
+ });
 
 // escuchar
 app.listen(app.get('port'), () => {
     console.log('servidor en puerto ', app.get('port'));
 });
+

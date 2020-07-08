@@ -107,6 +107,7 @@ instruccion
         |   main1        {$$=  $1;}
         |   metodo      {$$=  $1;}
         |   funcion     {$$=  $1;}
+        |   error panic { $$= OBJETO_INSTRUCCION.s_error(yytext,this._$.first_line,this._$.first_column); }
 ;
 
 declaracion 
@@ -164,8 +165,14 @@ sentencia
         |   return        {$$=  $1;}
         |   continue      {$$=  $1;}
         |   print         {$$=  $1;} 
+        |   error  panic  { $$= OBJETO_INSTRUCCION.s_error(yytext,this._$.first_line,this._$.first_column); }
 ;
 
+panic
+        : PYCOMA         {$$ = $1;}
+        | DOSPUNTOS      {$$ = $1;}
+        | LLAVEDER       {$$ = $1;}
+;
 asignacion 
         :   ID IGUAL operacion PYCOMA {$$ = OBJETO_INSTRUCCION.Asignacion($1+$2,$3);}
 ;

@@ -7,7 +7,9 @@ const TIPO_INSTRUCCION = require('./instrucciones').TIPO_INSTRUCCION;
 let ast;
 var html = "";
 var traduccion = "";
-var simbolos = "";
+var simbolos = [];
+var valor = [];
+var contador = 0;
 var trahtml;
 class interprete {
 
@@ -15,6 +17,8 @@ class interprete {
     }
     Parser(data) {
         try {
+            simbolos[0] ="";
+            valor[0] ="";
             ast = parser.parse(data.toString());
             this.procesarBloque(ast, 0);
             fs.writeFileSync('./ast.json', JSON.stringify(ast, null, 2));
@@ -23,11 +27,14 @@ class interprete {
             console.log("html");
             console.log(html);
             console.log("simbolos");
-            console.log(simbolos);
-
+            for (let index = 0; index < simbolos.length; index++) {
+                const element = simbolos[index];
+                const val = valor[index];
+                console.log(element + " " + val);
+            }
             console.log("json");
             this.convertir(html);
-            return { phyton: traduccion, htm: html ,sim:simbolos,jss:trahtml};
+            return { phyton: traduccion, htm: html, sim: simbolos, valo: valor, jss: trahtml };
         } catch (e) {
             console.error(e);
             return "FALLO";
@@ -35,7 +42,8 @@ class interprete {
     }
     convertir(html) {
         var json = himalaya.parse(html);
-        console.dir(json, { colors: true, depth: null });
+        trahtml = JSON.stringify(json);
+        // console.dir(json, { colors: true, depth: null });
     }
     procesarBloque(instrucciones, indice) {
         instrucciones.forEach(instruccion => {
@@ -61,137 +69,147 @@ class interprete {
             else if (instruccion.etiqueta == 4) { this.procesarMetodo(instruccion, indice); }
             else if (instruccion.etiqueta == 5) { this.procesarFuncion(instruccion, indice); }
             else if (instruccion.etiqueta == 22) { this.procesarincremento(instruccion, indice); }
+            else if (instruccion.etiqueta == 23) { this.procesarError(instruccion); }
             else { throw 'ERROR: tipo de instrucción no válido: ' + instruccion; }
         });
     }
+    procesarError(instruccion) {
+        console.log("Error: "+ instruccion.er+ " linea "+instruccion.fila + " columna " + instruccion.columna);
+    }
+
     procesarDeclaracion(instruccion, indice) {
-        traduccion += this.getTabulaciones(indice) + instruccion.valor+" "+'\n';
-        simbolos += "tipo = "+ instruccion.tip + " " +instruccion.valor + '\n';
+        traduccion += this.getTabulaciones(indice) + instruccion.valor + " " + '\n';
+        //simbolos += "tipo = "+ instruccion.tip + " " +instruccion.valor + '\n';
+        valor[contador] = instruccion.valor;
+        simbolos[contador++] = instruccion.tip;
+
     }
 
     procesarAsignacion(instruccion, indice) {
-        traduccion += this.getTabulaciones(indice) + instruccion.valor+" "+ '\n';
-        simbolos += "tipo : var " + "variable: "+instruccion.id + " valor: "  +instruccion.op + '\n';
+        traduccion += this.getTabulaciones(indice) + instruccion.valor + " " + '\n';
+        // simbolos += "tipo : var " + "variable: "+instruccion.id + " valor: "  +instruccion.op + '\n';
+        valor[contador] = instruccion.id + " " + instruccion.op;
+        simbolos[contador++] = "var";
     }
 
     procesarMain(instruccion, indice) {
         var tabs = this.getTabulaciones(indice);
-        traduccion += tabs + "def main():"+'\n';
+        traduccion += tabs + "def main():" + '\n';
         var instrucciones = instruccion.sentencia
         this.procesarBloque(instrucciones, indice + 1);
-        traduccion += tabs + "if__name__= \"__main__\""+'\n';
-        traduccion += tabs + "   main()"+'\n';
+        traduccion += tabs + "if__name__= \"__main__\"" + '\n';
+        traduccion += tabs + "   main()" + '\n';
     }
     procesarIf(instruccion, indice) {
         var tabs = this.getTabulaciones(indice);
-        traduccion += tabs + "if " + instruccion.condicion + " :"+'\n';
+        traduccion += tabs + "if " + instruccion.condicion + " :" + '\n';
         var instrucciones = instruccion.sentencia;
         this.procesarBloque(instrucciones, indice + 1);
     }
     procesarElse(instruccion, indice) {
         var tabs = this.getTabulaciones(indice);
-        traduccion += tabs + "if " + instruccion.condicion + " :"+'\n';
+        traduccion += tabs + "if " + instruccion.condicion + " :" + '\n';
         var instrucciones = instruccion.sentenciaI;
         this.procesarBloque(instrucciones, indice + 1);
-        traduccion += tabs + "else :"+'\n';
+        traduccion += tabs + "else :" + '\n';
         var instruccionesE = instruccion.sentencia
         this.procesarBloque(instruccionesE, indice + 1);
     }
     procesarElif(instruccion, indice) {
         var tabs = this.getTabulaciones(indice);
-        traduccion += tabs + "elif " + instruccion.condicion + " :"+'\n';
+        traduccion += tabs + "elif " + instruccion.condicion + " :" + '\n';
         var instrucciones = instruccion.sentencia;
         this.procesarBloque(instrucciones, indice + 1);
     }
     procesarIfelif(instruccion, indice) {
         var tabs = this.getTabulaciones(indice);
-        traduccion += tabs + "if " + instruccion.condicion + " :"+'\n';
+        traduccion += tabs + "if " + instruccion.condicion + " :" + '\n';
         var instrucciones = instruccion.sentencia;
         this.procesarBloque(instrucciones, indice + 1);
         var sentenciasEl = instruccion.elseif;
         this.procesarBloque(sentenciasEl, indice);
         if (instruccion.sentenciaE != "") {
-            traduccion += tabs + "else :"+'\n';
+            traduccion += tabs + "else :" + '\n';
             var instruccionesE = instruccion.sentenciaE
             this.procesarBloque(instruccionesE, indice + 1);
         }
     }
     procesarWhile(instruccion, indice) {
         var tabs = this.getTabulaciones(indice);
-        traduccion += tabs + "while " + instruccion.condicion + " :"+'\n';
+        traduccion += tabs + "while " + instruccion.condicion + " :" + '\n';
         var instrucciones = instruccion.sentencia;
         this.procesarBloque(instrucciones, indice + 1);
     }
     procesarDoWhile(instruccion, indice) {
         var tabs = this.getTabulaciones(indice);
-        traduccion += tabs + "while True  :"+'\n';
+        traduccion += tabs + "while True  :" + '\n';
         var instrucciones = instruccion.sentencia;
         this.procesarBloque(instrucciones, indice + 1);
-        traduccion += tabs + "if (" + instruccion.condicion + "):"+'\n';
-        traduccion += this.getTabulaciones(indice + 2) + "break"+'\n';
+        traduccion += tabs + "if (" + instruccion.condicion + "):" + '\n';
+        traduccion += this.getTabulaciones(indice + 2) + "break" + '\n';
     }
     procesarFor(instruccion, indice) {
         var tabs = this.getTabulaciones(indice);
         var inicial = parseInt(instruccion.inicializacion) + 1;
-        traduccion += tabs + "for " + instruccion.variable + " in range(" + inicial + "," + instruccion.condicion + "):"+'\n';
+        traduccion += tabs + "for " + instruccion.variable + " in range(" + inicial + "," + instruccion.condicion + "):" + '\n';
         var instrucciones = instruccion.sentencia;
         this.procesarBloque(instrucciones, indice + 1);
     }
     procesarPrint(instruccion, indice) {
-        traduccion += this.getTabulaciones(indice) + instruccion.valor+'\n';
+        traduccion += this.getTabulaciones(indice) + instruccion.valor + '\n';
     }
     procesarPrintHtml(instruccion, indice) {
-        traduccion += this.getTabulaciones(indice) + instruccion.valor+'\n';
+        traduccion += this.getTabulaciones(indice) + instruccion.valor + '\n';
         html = html + instruccion.val + '\n';
     }
     procesarFuncion(instruccion, indice) {
         var tabs = this.getTabulaciones(indice);
-        traduccion += tabs + "def " + instruccion.id + " (" + instruccion.parametro + "):"+'\n';
+        traduccion += tabs + "def " + instruccion.id + " (" + instruccion.parametro + "):" + '\n';
         var instrucciones = instruccion.sentencia
         this.procesarBloque(instrucciones, indice + 1);
     }
     procesarMetodo(instruccion, indice) {
         var tabs = this.getTabulaciones(indice);
-        traduccion += tabs + "def " + instruccion.id + " (" + instruccion.parametro + "):"+'\n';
+        traduccion += tabs + "def " + instruccion.id + " (" + instruccion.parametro + "):" + '\n';
         var instrucciones = instruccion.sentencia
         this.procesarBloque(instrucciones, indice + 1);
     }
     procesarSwitch(instruccion, indice) {
         var tabs = this.getTabulaciones(indice);
-        traduccion += tabs + "def switch(case," + instruccion.condicion + ")  :"+'\n';
-        traduccion += tabs + "   switcher = {"+'\n';
+        traduccion += tabs + "def switch(case," + instruccion.condicion + ")  :" + '\n';
+        traduccion += tabs + "   switcher = {" + '\n';
         var casos = instruccion.caso;
         this.procesarBloque(casos, indice + 1);
-        traduccion += tabs + "   }"+'\n';
+        traduccion += tabs + "   }" + '\n';
     }
     procesarCaso(instruccion, indice) {
         var tabs = this.getTabulaciones(indice);
         var instrucciones = instruccion.sentencia;
-        traduccion += tabs + instruccion.valor + ":"+'\n';
+        traduccion += tabs + instruccion.valor + ":" + '\n';
         this.procesarBloque(instrucciones, indice);
     }
     procesarDefault(instruccion, indice) {
         var tabs = this.getTabulaciones(indice);
-        traduccion += tabs + "default: "+'\n';
+        traduccion += tabs + "default: " + '\n';
         var instrucciones = instruccion.sentencia;
         this.procesarBloque(instrucciones, indice);
     }
     procesarBreak(instruccion, indice) {
-        traduccion += this.getTabulaciones(indice) + instruccion.valor+'\n';
+        traduccion += this.getTabulaciones(indice) + instruccion.valor + '\n';
 
     }
     procesarContinue(instruccion, indice) {
-        traduccion += this.getTabulaciones(indice) + instruccion.valor+'\n';
+        traduccion += this.getTabulaciones(indice) + instruccion.valor + '\n';
 
     }
     procesarReturn(instruccion, indice) {
-        traduccion += this.getTabulaciones(indice) + instruccion.valor+'\n';
+        traduccion += this.getTabulaciones(indice) + instruccion.valor + '\n';
     }
     procesarCallmetodo(instruccion, indice) {
-        traduccion += this.getTabulaciones(indice) + instruccion.valor+'\n';
+        traduccion += this.getTabulaciones(indice) + instruccion.valor + '\n';
     }
     procesarincremento(instruccion, indice) {
-        traduccion += this.getTabulaciones(indice) + instruccion.valor+'\n';
+        traduccion += this.getTabulaciones(indice) + instruccion.valor + '\n';
     }
     getTabulaciones(indice) {
         var salida = "";
